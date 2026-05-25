@@ -1,58 +1,55 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
  
 export default function App() {
-  const [nome, setNome] = useState('');
-  const [senha, setSenha] = useState('');
-  const [nota1, setNota1] = useState(0);
-  const [nota2, setNota2] = useState(0);
-  const [resultado, setResultado] = useState(0);
- 
-  function calcularMedia() {
-    const media = (Number(nota1) + Number(nota2)) / 2;
-    setResultado(media);
+  const [etanol, setEtanol] = useState("");
+  const [gasolina, setGasolina] = useState("");
+  const [resultado, setResultado] = useState("");
+  const [status, setStatus]= useState("");
+
+ function calcularVantagem() {
+    const precoEtanol = parseFloat(etanol);
+    const precoGasolina = parseFloat(gasolina);
+
+    const vantagem = precoEtanol / precoGasolina;
+    setResultado(vantagem.toFixed(2));
+
+    // Lógica da mensagem direto aqui
+    if (vantagem > 0.7) {
+      setStatus("GASOLINA");
+    } else {
+      setStatus("ETANOL");
+    }
   }
  
   return (
     <View style={styles.container}>
+            <Image
+        source={require("./img/ImagemPosto.png")}
+        width={50}
+      />
       <Text style={styles.texto}>Entrada de dados</Text>
+ 
       <TextInput
         style={styles.input}
-        placeholder='Digite seu nome'
-        placeholderTextColor='#ccc'
-        onChangeText={setNome}
-        value={nome}
-        keyboardType='default'
-       />
-      <TextInput
-        style={styles.input}
-        placeholder='Digite a senha'
-        onChangeText={setSenha}
-        value={senha}
-        secureTextEntry={true}
-      />
-      <TextInput
-        style={styles.inputMultiLine}
-        placeholder='Digite qualquer coisa'
-        multiline
+        placeholder='Digite o preço do etanol'
+        onChangeText={setEtanol}
+        value={etanol}          
       />
       <TextInput
         style={styles.input}
-        placeholder='Digite a nota 1'
-        onChangeText={setNota1}
-        value={nota1}          
+        placeholder='Digite o preço da gasolina'
+        onChangeText={setGasolina}
+        value={gasolina}      
       />
-      <TextInput
-        style={styles.input}
-        placeholder='Digite a nota 2'
-        onChangeText={setNota2}
-        value={nota2}      
-      />
-      <Text style={styles.texto}>{resultado}</Text>
       <Button
         title = 'Calcular Média'
-        onPress={calcularMedia}
+        onPress={calcularVantagem}
       />
+  <Text style={styles.texto}>{resultado}</Text>
+      <Text>Abasteça com: {status}</Text>
+
+      
     </View>
   );
 }
